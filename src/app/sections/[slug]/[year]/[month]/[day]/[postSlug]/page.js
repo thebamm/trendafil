@@ -50,7 +50,7 @@ export async function generateMetadata({ params }) {
 export default async function ArticlePage({ params }) {
   const { postSlug } = await params
 
-  const article = await client.fetch(postBySlugQuery, { slug: postSlug })
+  const article = await client.fetch(postBySlugQuery, { slug: postSlug }, { next: { revalidate: 60 } })
 
   if (!article) notFound()
 

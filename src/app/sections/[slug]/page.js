@@ -14,8 +14,8 @@ export default async function CategoryPage({
   params,
 }) {
   const { slug } = await params
-  const category = await client.fetch(categoryBySlugQuery, { slug: slug })
-  const posts = await client.fetch(postsByCategoryQuery, { slug: slug })
+  const category = await client.fetch(categoryBySlugQuery, { slug: slug }, { cache: 'force-cache' })
+  const posts = await client.fetch(postsByCategoryQuery, { slug: slug }, { next: { revalidate: 60 } })
 
   if (!category) notFound()
 
