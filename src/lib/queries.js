@@ -73,3 +73,16 @@ export const relatedPostsQuery = groq`
     "categories": categories[]->{ _id, title, slug }
   }
 `
+export const latestPostsQuery = groq`
+  *[_type == "post"] | order(publishedAt desc) [0...5] {
+    _id,
+    title,
+    slug,
+    publishedAt,
+    excerpt,
+    body,
+    "author": author->{ name, slug },
+    "mainImage": mainImage{ asset->, alt },
+    "categories": categories[]->{ _id, title, slug }
+  }
+`

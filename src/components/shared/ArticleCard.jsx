@@ -26,14 +26,7 @@ const ArticleCard = ({ article, variant = "default" }) => {
             />
           </div>
         )}
-        {/*<div className="relative h-20 w-28 shrink-0 overflow-hidden rounded-md bg-muted">*/}
-        {/*  <img*/}
-        {/*    src={article.image}*/}
-        {/*    alt={article.title}*/}
-        {/*    loading="lazy"*/}
-        {/*    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"*/}
-        {/*  />*/}
-        {/*</div>*/}
+
         <div className="min-w-0 flex-1">
           {article.categories &&
             article.categories.map((cat) => (
@@ -46,6 +39,10 @@ const ArticleCard = ({ article, variant = "default" }) => {
           <h4 className="mt-1 line-clamp-3 text-sm font-semibold leading-snug text-foreground transition-colors group-hover:text-brand">
             {article.title}
           </h4>
+
+          <div className="mt-3 flex items-center gap-2 text-xs text-muted-foreground">
+            <span>{readTime} min read</span>
+          </div>
         </div>
       </Link>
     );
