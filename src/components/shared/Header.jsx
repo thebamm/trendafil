@@ -5,15 +5,16 @@ import { formatMacedonianDate } from '@/lib/utils'
 import Link from 'next/link'
 import { Search, Menu } from "lucide-react"
 import { usePathname } from 'next/navigation'
+import Logo from '@/components/shared/Logo'
 
 const Header = ({
   categories
 }) => {
   const [open, setOpen] = useState(false)
   const pathname = usePathname()
-  const today = new Date().toLocaleDateString("en-US", {
-    weekday: "long", month: "long", day: "numeric", year: "numeric",
-  })
+  // const today = new Date().toLocaleDateString("en-US", {
+  //   weekday: "long", month: "long", day: "numeric", year: "numeric",
+  // })
 
   return (
     // <header className='border-grid sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60'>
@@ -21,26 +22,16 @@ const Header = ({
     {/* Top strip */}
       <div className="border-b border-border/60 bg-secondary/40">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-1.5 text-[11px] uppercase tracking-widest text-muted-foreground">
-          {/*<span>{formatMacedonianDate()}</span>*/}
-          <span>{today}</span>
+          <span>{formatMacedonianDate()}</span>
+          {/*<span>{today}</span>*/}
           <span className="hidden sm:block">News that punches above its weight</span>
         </div>
       </div>
 
-      {/*<div className='flex h-14 items-center justify-between gap-8 px-2 sm:px-4 md:px-6'>*/}
-      {/*  <div className='flex-none'>*/}
-      {/*    <div className='w-32'>*/}
-      {/*      LOGO*/}
-      {/*    </div>*/}
-      {/*  </div>*/}
-
-      {/*  <ModeToggle />*/}
-      {/*</div>*/}
       {/* Main bar */}
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-6 px-4 py-4">
-        <Link className="shrink-0" href='/'>
-          {/*<Logo />*/}
-          LOGO
+        <Link className="shrink-0 w-full max-w-40" href='/'>
+          <Logo />
         </Link>
 
         <nav className="hidden items-center gap-6 md:flex">

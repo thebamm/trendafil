@@ -59,8 +59,10 @@
   --radius: 0.65rem;
 
   /* Brand */
-  --brand: oklch(0.832 0.171 84.6); /* #ffbe00 */
-  --brand-foreground: oklch(0.18 0 0);
+  /*--brand: oklch(0.832 0.171 84.6); !* #ffbe00 *!*/
+  --brand: oklch(0.59 0.23 27.6); /* #ed1c24 */
+  --brand-foreground: oklch(1 0 0); /* #ffffff */
+  /*--brand-foreground: oklch(0.18 0 0);*/
   --ink: oklch(0.18 0 0); /* #121212 */
 
   --background: oklch(1 0 0);

@@ -86,3 +86,26 @@ export const latestPostsQuery = groq`
     "categories": categories[]->{ _id, title, slug }
   }
 `
+// Get all categories with their 4 latest posts, excluding specific IDs
+export const categoriesWithPostsQuery = groq`
+  *[_type == "category"] {
+    _id,
+    title,
+    slug,
+    "posts": *[
+      _type == "post" &&
+      references(^._id) &&
+      !(_id in $excludeIds)
+    ] | order(publishedAt desc) [0...4] {
+      _id,
+      title,
+      slug,
+      publishedAt,
+      excerpt,
+      body,
+      "author": author->{ name, slug },
+      "mainImage": mainImage{ asset->, alt },
+      "categories": categories[]->{ _id, title, slug }
+    }
+  }
+`

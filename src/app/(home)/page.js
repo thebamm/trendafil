@@ -1,6 +1,6 @@
 import AdSlot from '@/components/shared/AdSlot'
 import { client } from '@/sanity/lib/client'
-import { latestPostsQuery } from '@/lib/queries'
+import { categoriesWithPostsQuery, latestPostsQuery } from '@/lib/queries'
 import Link from 'next/link'
 import { getPostUrl } from '@/lib/utils'
 import Image from 'next/image'
@@ -8,13 +8,22 @@ import { urlFor } from '@/lib/sanity'
 import React from 'react'
 import ArticleCard from '@/components/shared/ArticleCard'
 import FeaturedArticle from '@/components/shared/FeaturedArticle'
+import CategorySection from '@/components/shared/CategorySection'
 
 export const revalidate = 60
 
 export default async function Home() {
-  const posts = await client.fetch(latestPostsQuery)
+  const latestPosts = await client.fetch(latestPostsQuery)
 
-  const [featured, ...rest] = posts // split first from the rest
+  // Extract IDs to exclude
+  const excludeIds = latestPosts.map((p) => p._id)
+
+  const categories = await client.fetch(categoriesWithPostsQuery, { excludeIds })
+
+  // Optionally filter out categories that have no posts left after exclusion
+  const categoriesWithPosts = categories.filter((cat) => cat.posts.length > 0)
+
+  const [featured, ...rest] = latestPosts // split first from the rest
 
   return (
     <>
@@ -34,11 +43,6 @@ export default async function Home() {
                   <ArticleCard article={post} variant="compact"/>
                 </div>
               ))}
-              {/*{secondary.map((a) => (*/}
-              {/*  <div key={a.slug} className="py-4 first:pt-0">*/}
-              {/*    <ArticleCard article={a} variant="compact" />*/}
-              {/*  </div>*/}
-              {/*))}*/}
             </div>
             <AdSlot size="rectangle" />
           </div>
@@ -55,10 +59,10 @@ export default async function Home() {
         <div className="mb-8 flex items-end justify-between">
           <div>
             <span className="text-xs font-bold uppercase tracking-widest text-brand">
-              The Latest
+              Најново
             </span>
             <h2 className="mt-1 font-display text-3xl font-black md:text-4xl">
-              What's moving the world
+              Што го движи светот
             </h2>
           </div>
           {/*<Link*/}
@@ -70,6 +74,11 @@ export default async function Home() {
           {/*</Link>*/}
         </div>
 
+        {/* Categories sections */}
+        {categoriesWithPosts.map((category) => (
+          <CategorySection key={category._id} category={category} />
+        ))}
+
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
           {/*{rest.map((a, i) => (*/}
           {/*  <div key={a.slug} style={{ animationDelay: `${i * 60}ms` }} className="fade-up">*/}
@@ -80,13 +89,13 @@ export default async function Home() {
       </section>
 
       {/* Brand band */}
-      <section className="relative overflow-hidden bg-primary text-primary-foreground">
+      <section className="relative overflow-hidden bg-black text-primary-foreground">
         <div className="absolute -right-20 -top-20 h-72 w-72 rounded-full bg-brand/30 blur-3xl" />
         <div className="absolute -bottom-24 -left-16 h-72 w-72 rounded-full bg-brand/20 blur-3xl" />
         <div className="relative mx-auto grid max-w-7xl gap-8 px-4 py-16 md:grid-cols-2 md:items-center">
           <div>
             <span className="text-xs font-bold uppercase tracking-widest text-brand">
-              The Buttercupz Brief
+              Брифингот на ТРЕНДАФИЛ
             </span>
             <h3 className="mt-2 font-display text-3xl font-black leading-tight text-balance md:text-4xl">
               The day's news, distilled.<br/>In your inbox by 7am.

@@ -1,15 +1,19 @@
 import React from 'react'
 import Link from 'next/link'
+import Logo from '@/components/shared/Logo'
 
 const Footer = ({ categories }) => {
   return (
     <footer className="mt-24 border-t border-border bg-secondary/40">
       <div className="mx-auto grid max-w-7xl gap-10 px-4 py-14 md:grid-cols-4">
         <div className="md:col-span-2">
-          {/*<Logo />*/} LOGO
+          <Link className="block w-full max-w-40" href='/'>
+            <Logo />
+          </Link>
+
           <p className="mt-4 max-w-md text-sm text-muted-foreground">
             Independent journalism, sharp opinions and the stories worth your morning coffee.
-            Buttercupz delivers the news with bite.
+            Trendafil delivers the news with bite.
           </p>
           {/*<form*/}
           {/*  onSubmit={(e) => e.preventDefault()}*/}
@@ -59,7 +63,7 @@ const Footer = ({ categories }) => {
       </div>
       <div className="border-t border-border">
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-2 px-4 py-5 text-xs text-muted-foreground sm:flex-row">
-          <span>© {new Date().getFullYear()} Buttercupz Media. All rights reserved.</span>
+          <span>© {new Date().getFullYear()} ТРЕНДАФИЛ Медиа</span>
           <span className="flex gap-4">
             <a href="#" className="hover:text-foreground">Privacy</a>
             <a href="#" className="hover:text-foreground">Terms</a>
