@@ -98,7 +98,7 @@ export default async function ArticlePage({ params }) {
 
               <span>·</span>
               {article.publishedAt && (
-                <span><time className='block text-xs text-muted-foreground mb-2' dateTime={article.publishedAt}>
+                <span><time dateTime={article.publishedAt}>
                   {format(new Date(article.publishedAt), 'd MMMM yyyy', { locale: mk })}
                 </time></span>
               )}
