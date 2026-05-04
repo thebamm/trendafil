@@ -9,6 +9,8 @@ import React from 'react'
 import ArticleCard from '@/components/shared/ArticleCard'
 import { getReadTime } from '@/lib/utils'
 import Content from '@/components/shared/Content'
+import { format } from 'date-fns'
+import { mk } from 'date-fns/locale'
 
 export async function generateStaticParams() {
   const posts = await client.fetch(allPostsQuery)
@@ -96,7 +98,9 @@ export default async function ArticlePage({ params }) {
 
               <span>·</span>
               {article.publishedAt && (
-                <span><time>{new Date(article.publishedAt).toLocaleDateString()}</time></span>
+                <span><time className='block text-xs text-muted-foreground mb-2' dateTime={article.publishedAt}>
+                  {format(new Date(article.publishedAt), 'd MMMM yyyy', { locale: mk })}
+                </time></span>
               )}
               <span>·</span>
               <span>{`${readTime} ${readTime === 1 ? 'минута' : 'минути'} читање`}</span>
