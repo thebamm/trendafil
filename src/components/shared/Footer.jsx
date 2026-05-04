@@ -33,7 +33,7 @@ const Footer = ({ categories }) => {
 
         <div>
           <h4 className="mb-3 text-xs font-semibold uppercase tracking-widest text-muted-foreground">
-            Sections
+            Секции
           </h4>
           <ul className="space-y-2 text-sm">
             {categories.map((cat) => (
@@ -63,7 +63,7 @@ const Footer = ({ categories }) => {
       </div>
       <div className="border-t border-border">
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-2 px-4 py-5 text-xs text-muted-foreground sm:flex-row">
-          <span>© {new Date().getFullYear()} ТРЕНДАФИЛ Медиа</span>
+          <span>© {new Date().getFullYear()} ТРЕНДАФИЛ</span>
           <span className="flex gap-4">
             <a href="#" className="hover:text-foreground">Privacy</a>
             <a href="#" className="hover:text-foreground">Terms</a>

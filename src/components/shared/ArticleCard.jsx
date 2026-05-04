@@ -5,6 +5,8 @@ import { Badge } from "@/components/ui/badge"
 import Image from 'next/image'
 import { urlFor } from '@/lib/sanity'
 import { getPostUrl, getReadTime } from '@/lib/utils'
+import { format } from 'date-fns'
+import { mk } from 'date-fns/locale'
 
 const ArticleCard = ({ article, variant = "default" }) => {
   const readTime = getReadTime(article.body)
@@ -28,20 +30,18 @@ const ArticleCard = ({ article, variant = "default" }) => {
         )}
 
         <div className="min-w-0 flex-1">
-          {article.categories &&
-            article.categories.map((cat) => (
-              <span key={cat._id} className="text-[10px] font-bold uppercase tracking-widest text-brand">
-                {cat?.title}
-              </span>
-              )
-            )}
+          {article.category && (
+            <span className="text-[10px] font-bold uppercase tracking-widest text-brand">
+              {article.category.title}
+            </span>
+          )}
 
           <h4 className="mt-1 line-clamp-3 text-sm font-semibold leading-snug text-foreground transition-colors group-hover:text-brand">
             {article.title}
           </h4>
 
           <div className="mt-3 flex items-center gap-2 text-xs text-muted-foreground">
-            <span>{readTime} min read</span>
+            <span>{`${readTime} ${readTime === 1 ? 'минута' : 'минути'} читање`}</span>
           </div>
         </div>
       </Link>
@@ -65,19 +65,23 @@ const ArticleCard = ({ article, variant = "default" }) => {
             />
           )}
 
-          {article.categories &&
+          {article.category && (
             <div className='absolute left-3 top-3 flex gap-2'>
-            {article.categories.map((cat) => (
-                <Badge key={cat._id} className="rounded-sm bg-brand px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest text-brand-foreground hover:bg-brand">
-                  {cat.title}
-                </Badge>
-              )
-            )}
+              <Badge className="rounded-sm bg-brand px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest text-brand-foreground hover:bg-brand">
+                {article.category.title}
+              </Badge>
             </div>
-          }
+          )}
         </div>
 
         <CardContent className="p-5">
+          {article.publishedAt && (
+            // <time dateTime={article.publishedAt}>{new Date(article.publishedAt).toLocaleDateString()}</time>
+            <time className='block text-xs text-muted-foreground mb-2' dateTime={article.publishedAt}>
+              {format(new Date(article.publishedAt), 'd MMMM yyyy', { locale: mk })}
+            </time>
+          )}
+
           <h3 className="font-display text-xl font-bold leading-tight text-balance transition-colors group-hover:text-brand">
             {article.title}
           </h3>
@@ -87,11 +91,11 @@ const ArticleCard = ({ article, variant = "default" }) => {
           <div className="mt-3 flex items-center gap-2 text-xs text-muted-foreground">
             {article.author && <span className="font-medium text-foreground/80">{article.author.name}</span>}
             <span>·</span>
-            <span>{article.publishedAt && (
-              <time>{new Date(article.publishedAt).toLocaleDateString()}</time>
-            )}</span>
-            <span>·</span>
-            <span>{readTime} min read</span>
+            {/*<span>{article.publishedAt && (*/}
+            {/*  <time>{new Date(article.publishedAt).toLocaleDateString()}</time>*/}
+            {/*)}</span>*/}
+            {/*<span>·</span>*/}
+            <span>{`${readTime} ${readTime === 1 ? 'минута' : 'минути'} читање`}</span>
           </div>
         </CardContent>
       </Card>

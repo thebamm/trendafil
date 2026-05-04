@@ -3,6 +3,8 @@ import { getPostUrl, getReadTime } from '@/lib/utils'
 import Image from 'next/image'
 import { urlFor } from '@/lib/sanity'
 import Link from 'next/link'
+import { format } from 'date-fns'
+import { mk } from 'date-fns/locale'
 
 const FeaturedArticle = ({ featured }) => {
   const readTime = getReadTime(featured.body)
@@ -25,15 +27,11 @@ const FeaturedArticle = ({ featured }) => {
         )}
         <div className='absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent' />
         <div className='absolute inset-x-0 bottom-0 p-6 md:p-10'>
-                <span className='inline-block rounded-sm bg-brand px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-brand-foreground'>
-                  {featured.categories &&
-                    featured.categories.map((cat) => (
-                        <span key={cat._id}>
-                        {cat?.title}
-                      </span>
-                      )
-                    )}
-                </span>
+          {featured.category && (
+            <span className='inline-block rounded-sm bg-brand px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-brand-foreground'>
+              {featured.category.title}
+            </span>
+          )}
           <h1 className='mt-4 max-w-3xl font-display text-2xl font-black leading-[1.05] text-white text-balance md:text-5xl'>
             {featured.title}
           </h1>
@@ -44,10 +42,10 @@ const FeaturedArticle = ({ featured }) => {
             {featured.author && <span className='font-medium text-white'>{featured.author.name}</span>}
             <span>·</span>
             <span>{featured.publishedAt && (
-              <time>{new Date(featured.publishedAt).toLocaleDateString()}</time>
+              <time dateTime={featured.publishedAt}>{format(new Date(featured.publishedAt), 'd MMMM yyyy', { locale: mk })}</time>
             )}</span>
             <span>·</span>
-            <span>{readTime} min read</span>
+            <span>{`${readTime} ${readTime === 1 ? 'минута' : 'минути'} читање`}</span>
           </div>
         </div>
       </div>

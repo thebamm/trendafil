@@ -14,11 +14,11 @@ export async function generateStaticParams() {
   const posts = await client.fetch(allPostsQuery)
 
   return posts
-    .filter((post) => post.publishedAt && post.slug?.current && post.categories?.length > 0)
+    .filter((post) => post.publishedAt && post.slug?.current && post.category)
     .map((post) => {
       const date = new Date(post.publishedAt)
       return {
-        category: post.categories[0].slug.current,
+        category: post.category.slug.current,
         year: String(date.getFullYear()),
         month: String(date.getMonth() + 1).padStart(2, '0'),
         day: String(date.getDate()).padStart(2, '0'),
@@ -56,12 +56,9 @@ export default async function ArticlePage({ params }) {
 
   const readTime = getReadTime(article.body)
 
-  // Get category IDs from current post
-  const categoryIds = article.categories.map((cat) => cat._id)
-
   const relatedPosts = await client.fetch(relatedPostsQuery, {
     slug: postSlug,
-    categoryIds,
+    categoryId: article.category._id,
   })
 
   return (
@@ -69,19 +66,16 @@ export default async function ArticlePage({ params }) {
       <article>
         <header className='border-b border-border'>
           <div className='mx-auto max-w-3xl px-4 pt-12 pb-8'>
-            {article.categories &&
+            {article.category && (
               <div className='flex gap-2'>
-                {article.categories.map((cat) => (
-                  <Link
-                    key={cat._id}
-                    href={`/sections/${cat.slug.current}`}
-                    className='text-xs font-bold uppercase tracking-widest text-brand hover:underline'
-                  >
-                    {cat?.title}
-                  </Link>
-                ))}
+                <Link
+                  href={`/sections/${article.category.slug.current}`}
+                  className='text-xs font-bold uppercase tracking-widest text-brand hover:underline'
+                >
+                  {article.category.title}
+                </Link>
               </div>
-            }
+            )}
 
             <h1 className='mt-3 font-display text-4xl font-black leading-[1.05] text-balance md:text-5xl lg:text-6xl'>
               {article.title}
@@ -105,7 +99,7 @@ export default async function ArticlePage({ params }) {
                 <span><time>{new Date(article.publishedAt).toLocaleDateString()}</time></span>
               )}
               <span>·</span>
-              <span>{readTime} min read</span>
+              <span>{`${readTime} ${readTime === 1 ? 'минута' : 'минути'} читање`}</span>
             </div>
           </div>
 
@@ -142,7 +136,7 @@ export default async function ArticlePage({ params }) {
             <div className='sticky top-28 space-y-6'>
               <AdSlot size='rectangle' />
               <div className='rounded-lg border border-border bg-card p-5'>
-                <h4 className='font-display text-lg font-bold'>More to read</h4>
+                <h4 className='font-display text-lg font-bold'>Повеќе за читање</h4>
                 <div className='mt-4 space-y-4'>
                   {relatedPosts?.map((a) => (
                     <ArticleCard key={a._id} article={a} variant='compact' />

@@ -1,17 +1,19 @@
 import React from 'react'
 import ArticleCard from '@/components/shared/ArticleCard'
 import Link from 'next/link'
+import { ArrowRight } from 'lucide-react'
 
 const CategorySection = ({ category }) => {
   return (
     <section className="mt-12">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-2xl font-bold">{category.title}</h2>
+        <h2 className="border-l-4 border-brand pl-3 text-2xl font-bold">{category.title}</h2>
+
         <Link
-          href={`/categories/${category.slug.current}`}
-          className="text-sm text-blue-600 hover:underline"
+          href={`/sections/${category.slug.current}`}
+          className="text-sm text-brand hover:underline flex items-center"
         >
-          See all articles →
+          Сите статии <ArrowRight size={14} />
         </Link>
       </div>
 

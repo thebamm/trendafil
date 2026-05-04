@@ -1,5 +1,6 @@
-import {TagIcon} from '@sanity/icons'
-import {defineField, defineType} from 'sanity'
+import { TagIcon } from '@sanity/icons'
+import { defineField, defineType } from 'sanity'
+import { orderRankField } from '@sanity/orderable-document-list'
 
 export const categoryType = defineType({
   name: 'category',
@@ -7,6 +8,7 @@ export const categoryType = defineType({
   type: 'document',
   icon: TagIcon,
   fields: [
+    orderRankField({ type: 'category' }),
     defineField({
       name: 'title',
       type: 'string',

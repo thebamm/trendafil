@@ -1,7 +1,7 @@
 import { groq } from 'next-sanity'
 
 export const categoriesQuery = groq`
-  *[_type == "category"] | order(title asc) {
+  *[_type == "category"] | order(orderRank asc) {
     _id,
     title,
     slug,
@@ -18,8 +18,24 @@ export const categoryBySlugQuery = groq`
   }
 `
 
+export const topStoriesQuery = groq`
+  *[_type == "topStories"][0] {
+    posts[]-> {
+      _id,
+      title,
+      slug,
+      body,
+      publishedAt,
+      excerpt,
+      "mainImage": mainImage{ asset->, alt },
+      "author": author->{ name, slug },
+      "category": category->{ _id, title, slug }
+    }
+  }
+`
+
 export const postsByCategoryQuery = groq`
-  *[_type == "post" && references(*[_type == "category" && slug.current == $slug]._id)] | order(publishedAt desc) {
+  *[_type == "post" && category->slug.current == $slug] | order(publishedAt desc) {
     _id,
     title,
     slug,
@@ -27,7 +43,7 @@ export const postsByCategoryQuery = groq`
     publishedAt,
     "author": author->{ name, slug },
     "mainImage": mainImage{ asset->, alt },
-    "categories": categories[]->{ _id, title, slug }
+    "category": category->{ _id, title, slug }
   }
 `
 
@@ -47,7 +63,7 @@ export const postBySlugQuery = groq`
     },
     "author": author->{ name, slug },
     "mainImage": mainImage{ asset->, alt },
-    "categories": categories[]->{ _id, title, slug }
+    "category": category->{ _id, title, slug }
   }
 `
 
@@ -55,24 +71,27 @@ export const allPostsQuery = groq`
   *[_type == "post"] {
     slug,
     publishedAt,
-    "categories": categories[]->{ slug }
+    "category": category->{ slug }
   }
 `
+
 export const relatedPostsQuery = groq`
   *[
     _type == "post" &&
     slug.current != $slug &&
-    references(*[_type == "category" && _id in $categoryIds]._id)
+    category._ref == $categoryId
   ] | order(publishedAt desc) [0..2] {
     _id,
     title,
+    body,
     slug,
     publishedAt,
     excerpt,
     "mainImage": mainImage{ asset->, alt },
-    "categories": categories[]->{ _id, title, slug }
+    "category": category->{ _id, title, slug }
   }
 `
+
 export const latestPostsQuery = groq`
   *[_type == "post"] | order(publishedAt desc) [0...5] {
     _id,
@@ -83,10 +102,10 @@ export const latestPostsQuery = groq`
     body,
     "author": author->{ name, slug },
     "mainImage": mainImage{ asset->, alt },
-    "categories": categories[]->{ _id, title, slug }
+    "category": category->{ _id, title, slug }
   }
 `
-// Get all categories with their 4 latest posts, excluding specific IDs
+
 export const categoriesWithPostsQuery = groq`
   *[_type == "category"] {
     _id,
@@ -94,7 +113,7 @@ export const categoriesWithPostsQuery = groq`
     slug,
     "posts": *[
       _type == "post" &&
-      references(^._id) &&
+      category._ref == ^._id &&
       !(_id in $excludeIds)
     ] | order(publishedAt desc) [0...4] {
       _id,
@@ -105,7 +124,7 @@ export const categoriesWithPostsQuery = groq`
       body,
       "author": author->{ name, slug },
       "mainImage": mainImage{ asset->, alt },
-      "categories": categories[]->{ _id, title, slug }
+      "category": category->{ _id, title, slug }
     }
   }
 `

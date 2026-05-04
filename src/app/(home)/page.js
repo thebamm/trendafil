@@ -1,6 +1,6 @@
 import AdSlot from '@/components/shared/AdSlot'
 import { client } from '@/sanity/lib/client'
-import { categoriesWithPostsQuery, latestPostsQuery } from '@/lib/queries'
+import { categoriesWithPostsQuery, latestPostsQuery, topStoriesQuery } from '@/lib/queries'
 import Link from 'next/link'
 import { getPostUrl } from '@/lib/utils'
 import Image from 'next/image'
@@ -13,17 +13,18 @@ import CategorySection from '@/components/shared/CategorySection'
 export const revalidate = 60
 
 export default async function Home() {
-  const latestPosts = await client.fetch(latestPostsQuery)
+  // const latestPosts = await client.fetch(latestPostsQuery)
+  const { posts } = await client.fetch(topStoriesQuery)
 
   // Extract IDs to exclude
-  const excludeIds = latestPosts.map((p) => p._id)
+  const excludeIds = posts.map((p) => p._id)
 
   const categories = await client.fetch(categoriesWithPostsQuery, { excludeIds })
 
   // Optionally filter out categories that have no posts left after exclusion
   const categoriesWithPosts = categories.filter((cat) => cat.posts.length > 0)
 
-  const [featured, ...rest] = latestPosts // split first from the rest
+  const [featured, ...rest] = posts // split first from the rest
 
   return (
     <>
@@ -35,7 +36,7 @@ export default async function Home() {
           {/* Side rail */}
           <div className="flex flex-col gap-6 fade-up">
             <h2 className="border-l-4 border-brand pl-3 font-display text-sm font-bold uppercase tracking-widest">
-              Top Stories
+              Топ вести
             </h2>
             <div className="flex flex-col divide-y divide-border">
               {rest.map((post) => (

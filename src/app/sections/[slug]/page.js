@@ -24,7 +24,7 @@ export default async function CategoryPage({
       <section className="border-b border-border bg-secondary/40">
         <div className="mx-auto max-w-7xl px-4 py-12">
           <span className="text-xs font-bold uppercase tracking-widest text-brand">
-            Section
+            Секција
           </span>
           <h1 className="mt-2 font-display text-5xl font-black md:text-6xl">
             {category.title}
@@ -34,7 +34,6 @@ export default async function CategoryPage({
               {category.description}
             </p>
           )}
-
         </div>
       </section>
 
