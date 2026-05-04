@@ -44,7 +44,7 @@ export function getPostUrl(post) {
   const year = date.getFullYear()
   const month = String(date.getMonth() + 1).padStart(2, '0')
   const day = String(date.getDate()).padStart(2, '0')
-  const category = post.categories?.[0]?.slug?.current ?? 'uncategorized'
+  const category = post.category?.slug?.current ?? 'uncategorized'
 
   return `/sections/${category}/${year}/${month}/${day}/${post.slug.current}`
 }
