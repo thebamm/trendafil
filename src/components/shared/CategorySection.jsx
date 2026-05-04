@@ -6,7 +6,7 @@ import { ArrowRight } from 'lucide-react'
 const CategorySection = ({ category }) => {
   return (
     <section className="mt-12">
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex items-center justify-between mb-8">
         <h2 className="border-l-4 border-brand pl-3 text-2xl font-bold">{category.title}</h2>
 
         <Link
